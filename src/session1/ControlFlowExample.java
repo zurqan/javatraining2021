@@ -7,19 +7,37 @@ public class ControlFlowExample {
         tryWhile();
         tryDoWhile();
         tryFor();
+        trySwitchCase();
+        tryAddRecursion();
     }
 
-    private static void tryFor() {
-        for (int i = 0; i < 10; i++) {
+    private static void tryAddRecursion() {
+        int addResult = calculateAdd(10,20);
+        System.out.println("addResult = " + addResult);
+        addResult = calculateAdd(10,200);
+        System.out.println("addResult = " + addResult);
+//        addResult = calculateAdd(10,30000);
+//        System.out.println("addResult = " + addResult);
 
-            if(i%2 != 0){
-                continue;
-            }
-            System.out.println("for-i = " + i);
+    }
 
-            if(i>4){
+    private static int calculateAdd(int x, int y) {
+//        return x+y;
+        return y==0?x:calculateAdd(x+1,y-1);
+    }
+
+    private static void trySwitchCase() {
+        int a =1;
+
+        switch (a){
+            case 1:
+            case 2:
+                System.out.println("It is less than 3");
                 break;
-            }
+            case 10:
+                System.out.println("It is ten");
+                break;
+
         }
     }
 
@@ -57,5 +75,19 @@ public class ControlFlowExample {
         do{
             System.out.println("do-a2 = " + a);
         }while (a>100);
+    }
+
+    private static void tryFor() {
+        for (int i = 0; i < 10; i++) {
+
+            if(i%2 != 0){
+                continue;
+            }
+            System.out.println("for-i = " + i);
+
+            if(i>4){
+                break;
+            }
+        }
     }
 }
