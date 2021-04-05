@@ -14,7 +14,7 @@ public class ArrayExample2 {
         anotherArray[0]=10000;
         printMe(anotherArray);
         System.out.println("Old Array");
-        printMe(array);
+        printMe(array);//
 
         int[][] twoDimArray=new int[][]{{1,2},{1,2,3,4},{100,300,400}};
         int[] firstRow = twoDimArray[0];
