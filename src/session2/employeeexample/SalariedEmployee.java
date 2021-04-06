@@ -17,6 +17,8 @@ public class SalariedEmployee extends Employee {
         this.salary = salary;
     }
 
+
+
     @Override
     public double getSalaryPerMonth() {
         return salary;//this.salary
