@@ -20,9 +20,15 @@ public class Application {
 
         try {
             myMath.divide(10,0);
-        } catch (DivideCheckedException e) {
+            System.out.println("Just for test");
+        } catch (DivideCheckedException |ArithmeticException e) {
             e.printStackTrace();
             System.out.println("Exception thrown");
+        }catch (Exception e){
+            throw e;
         }
+//        finally {
+//            //
+//        }
     }
 }
