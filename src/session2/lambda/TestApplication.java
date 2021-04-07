@@ -4,7 +4,6 @@ public class TestApplication {
 
     public static void main(String[] args) {
         IntFunction addFive= new AddFiveFunction();
-
         System.out.println("addFive = " + addFive.apply(10));
 
         IntFunction addFiveV2= new IntFunction() {
