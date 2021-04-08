@@ -60,5 +60,17 @@ public class Step2Application {
         BiFunc<String,String,String> concatV2=(a,b)->a+b;
 
         System.out.println("concatV2.apply(\"Hello\",\" World!\") = " + concatV2.apply("Hello", " World!"));
+
+        BiFunc<String,String,Boolean> isSubString=
+                (sub,str)->str.indexOf(sub) > -1;
+
+        System.out.println("isSubString.apply(\"ham\",\"Mohammad\") = " + isSubString.apply("ham", "Mohammad"));
+
+        BiFunc<Character,String,Boolean> startsWith=
+                (c,str)->str.charAt(0)==c;
+
+        System.out.println("startsWith.apply('M',\"Mohammad\") = " + startsWith.apply('M', "Mohammad"));
+        System.out.println("startsWith.apply('A',\"Mohammad\") = " + startsWith.apply('A', "Mohammad"));
+
     }
 }

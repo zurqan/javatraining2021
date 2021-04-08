@@ -33,5 +33,29 @@ public class Step1Application {
         System.out.println("strLength.apply(\"Mohammad\") = " + strLength.apply("Mohammad"));
 
         System.out.println("strLength.apply(\"Java😄\") = " + strLength.apply("Java😄"));
+
+
+        System.out.println("getMeAdd10Function().apply(30) = " + getMeAdd10Function().apply(30));
+
+    }
+
+
+    public static IntFunc getMeAdd10Function(){
+
+//        IntFunc temp=a->a+10;
+//
+//        return temp;
+
+        return a->a+10;
+    }
+    public static IntFunc getMeAdd10Function2(){
+
+        IntFunc temp=new IntFunc() {
+            @Override
+            public int apply(int a) {
+                return a+10;
+            }
+        };
+        return temp;
     }
 }
