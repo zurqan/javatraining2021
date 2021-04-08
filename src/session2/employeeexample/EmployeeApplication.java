@@ -47,6 +47,9 @@ public class EmployeeApplication {
             }
         });
 
+        Collections.sort(listOfEmployees,
+                (o1,o2)->Double.compare(o1.getSalaryPerMonth(),o2.getSalaryPerMonth()));
+
         System.out.println("After salary Sorting");
         System.out.println("listOfEmployees = " + listOfEmployees);
 
