@@ -56,7 +56,7 @@ public class Sample1 {
         return  a+b;
     }
 
-    //not-pure
+    //not-pure ... Partial Function
     public int divide(int a,int b){//such that b not equal to zero
         return a / b;
     }

@@ -1,5 +1,9 @@
 package session3.exchandling;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
 public class Application {
 
     public static void main(String[] args)  {
@@ -13,6 +17,8 @@ public class Application {
 
         callDivideWithCheckedException(myMath);
         System.out.println("divide = " + divide);
+        closingResources();
+        closingResourcesJava7();
 
     }
 
@@ -30,5 +36,34 @@ public class Application {
 //        finally {
 //            //
 //        }
+    }
+
+    public static void closingResources(){
+
+        PrintWriter writer =null;
+
+        try {
+            writer=new PrintWriter(new File("test.txt"));
+            writer.println("Hello, World!");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if(writer!=null){
+                writer.close();
+            }
+        }
+
+    }
+
+    public static void closingResourcesJava7(){
+
+
+        try (PrintWriter writer=new PrintWriter(new File("test2.txt"))){
+
+            writer.println("Hello, World!");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 }
