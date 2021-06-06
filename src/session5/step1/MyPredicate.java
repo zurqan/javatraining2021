@@ -1,4 +1,4 @@
-package session5;
+package session5.step1;
 
 @FunctionalInterface
 public interface MyPredicate<T> {
