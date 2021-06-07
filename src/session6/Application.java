@@ -5,10 +5,11 @@ import session5.step2.Gender;
 import session5.step2.Student;
 
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
 import static session5.step2.Course.*;
 import static session5.step2.Gender.FEMALE;
 import static session5.step2.Gender.MALE;
@@ -30,9 +31,31 @@ public class Application {
     public static void main(String[] args) {
 //        Map<Course, Map<Gender,Long>> result=
 
-                Stream.of(students)
-                .flatMap(st->st.getCourses().stream())
+        Map<Course, Map<Gender, Long>> groupOfCourseByGender = Stream
+                .of(students)
+                .flatMap(st -> st.getCourses().stream().map(c -> new Tuple<Course, Student>(c, st)))
+//                .flatMap(st -> st.getCourses().stream().map(c -> new CourseStudent(c, st)))
+                .collect(groupingBy(tuple -> tuple._1, groupingBy(t -> t._2.getGender(), counting())));
 
 
+        System.out.println("groupOfCourseByGender = " + groupOfCourseByGender);
+
+
+    }
+
+    public static class Tuple<T,U> {
+        public final T _1;
+        public final U _2;
+
+        public Tuple(T _1, U _2) {
+            this._1 = _1;
+            this._2 = _2;
+        }
+    }
+
+    public static class CourseStudent extends  Tuple<Course,Student>{
+        public CourseStudent(Course _1, Student _2) {
+            super(_1, _2);
+        }
     }
 }
