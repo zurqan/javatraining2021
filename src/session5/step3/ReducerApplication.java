@@ -99,6 +99,18 @@ public class ReducerApplication {
         Integer product = productArray.apply(new Integer[]{1, 2, 3, 4, 5});
         System.out.println("product = " + product);
 
+
+        ArrayList<Integer> reversedOrder = reduceR(
+                elem -> acc -> {
+                    acc.add(elem);
+                    return acc;
+                },
+                new ArrayList<Integer>(),
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+
+        System.out.println("reversedOrder = " + reversedOrder);
+
     }
 
     //(acc->elem->acc)->initialValue->array->netAccumulated

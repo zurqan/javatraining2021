@@ -7,7 +7,7 @@ public class Application4 {
     public static void main(String[] args) {
 
         String simulateSum = IntStream
-                .rangeClosed(1, 10)
+                .rangeClosed(1, 10)//1,2,3,4,5,6,7,8,9,10
                 .boxed()
 //                .parallel()
                 .reduce("0",//initial value
