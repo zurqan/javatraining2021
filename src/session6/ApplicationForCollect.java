@@ -86,7 +86,7 @@ public class ApplicationForCollect {
         Map<Gender, List<Student>> collect = Stream
                 .of(students)
 //                .reduce()
-                .collect(groupingBy(Student::getGender, toList()));
+                .collect(groupingBy(Student::getGender));
 
 
     }

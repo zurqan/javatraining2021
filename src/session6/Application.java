@@ -4,6 +4,7 @@ import session5.step2.Course;
 import session5.step2.Gender;
 import session5.step2.Student;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -30,6 +31,10 @@ public class Application {
 
 
     public static void main(String[] args) {
+
+        Map<Gender, List<Student>> collect = Stream
+                .of(students)
+                .collect(groupingBy(Student::getGender));
 //        Map<Course, Map<Gender,Long>> result=
 
         Map<Course, Map<Gender, Long>> groupOfCourseByGender = Stream
