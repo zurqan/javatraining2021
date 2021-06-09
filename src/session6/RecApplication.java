@@ -1,5 +1,6 @@
 package session6;
 
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import static session6.RecApplication.TailCall.result;
@@ -35,11 +36,14 @@ public class RecApplication {
 //        long sum = sum(40000, 0);
 //        System.out.println("sum = " + sum);
 
-        System.out.println("sumTCE(40000, 0).eval() = " + sumTCE(40000, 0).eval());
+//        System.out.println("sumTCE(40000, 0).eval() = " + sumTCE(1, 1).eval());
 
-        TailCall<Integer> integerTailCall = add4TCE(5, 40000);
-        System.out.println("integerTailCall.eval() = " + integerTailCall.eval());
+//        TailCall<Integer> integerTailCall = add4TCE(5, 40000);
+//        System.out.println("integerTailCall.eval() = " + integerTailCall.eval());
 
+        System.out.println("fib(20) = " + fib(20));
+
+//        System.out.println("fibTCE(20).eval() = " + fibTCE(20).eval());
     }
 
 
@@ -83,14 +87,36 @@ public class RecApplication {
     //*think of using map inside the TCE.
     public static TailCall<Integer> add4TCE(int x, int y) {//x+y+y
 //        return x+y;
+//        return y == 0
+//                ? result(x) //-> x -> result(x)
+//                : TailCall.suspend(() ->
+//                result(
+//                        add4TCE(x + 1, y - 1).eval()
+//                                +
+//                                add4TCE(1, 0).eval())); // -> suspend(()->add(..)
+
+
+
         return y == 0
-                ? result(x) //-> x -> result(x)
-                : TailCall.suspend(() ->
-                result(
-                        add4TCE(x + 1, y - 1).eval()
-                                +
-                                add4TCE(1, 0).eval())); // -> suspend(()->add(..)
+                ? result(x)
+                : add4TCE(x + 1, y - 1).combine(add4TCE(x + 1, y - 1), (a, b) -> a + b);
     }
+
+    static int fib(int n) {
+        if (n <= 1)
+            return n;
+        return fib(n - 1) + fib(n - 2);
+    }
+    //TCE TCO
+    //Tail call elemination tail call opt
+
+    static TailCall<Integer> fibTCE(int n) {
+
+        return n <= 1
+                ? result(n)
+                : suspend(() -> fibTCE(n - 1).combine(fibTCE(n - 2),(a,b)->a+b));
+    }
+
 
     private static TailCall<Integer> addTail(int x, int y) {
 
@@ -107,6 +133,16 @@ public class RecApplication {
         public abstract TailCall<R> resume();
 
         public abstract boolean isSuspend();
+
+        public TailCall<R> combine(TailCall<R> a2, BiFunction<R, R, R> f) {
+
+            return !isSuspend() && !a2.isSuspend()
+                    ?result(f.apply(eval(), a2.eval()))
+                    :!isSuspend()
+                    ?suspend(() -> TailCall.suspend(() -> combine(a2.resume(), f)))
+                    :suspend(() -> TailCall.suspend(() -> resume().combine(a2, f)));
+
+        }
 
         public static <R> Result<R> result(R res) {
             return new Result<>(res);

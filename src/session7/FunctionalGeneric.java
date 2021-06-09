@@ -24,10 +24,20 @@ public class FunctionalGeneric {
                 x -> x * x,
                 x -> x - 5);
         System.out.println(result2);
+//        System.out.println(test(1, 2, 3));
     }
 
 
-    @SafeVarargs
+//    public static int test(Integer... a){
+//        Object[] r = a;
+//        r[0]="test";
+//        return 10;
+//
+//    }
+
+
+
+//    @SafeVarargs
     public static int mathOperation(int seed,
                                     Function<Integer,Integer>... functions){
 

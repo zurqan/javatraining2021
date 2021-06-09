@@ -98,6 +98,11 @@ public class WhyGeneric {
             System.out.println("a = " + a);
         }
     }
+    private static void printListElementGeneric2(List<?> p0) {
+        for (Object a : p0) {
+            System.out.println("a = " + a);
+        }
+    }
 
 
     public static void main(String[] args) {
