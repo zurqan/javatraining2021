@@ -1,9 +1,11 @@
 package session5.step3;
 
+import session5.step2.Gender;
 import session5.step2.Student;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.OptionalInt;
 import java.util.function.BiFunction;
 import java.util.stream.IntStream;
@@ -113,5 +115,32 @@ public class Application3 {
                     System.out.println("st.getName() = " + st.getName());
                     return st.getName(); })
                 .count();
+
+
+        Map<Gender, List<String>> grouping = ReducerApplication.grouping(
+                Student::getGender,
+                Student::getName,
+                students
+        );
+
+        System.out.println("grouping = " + grouping);
+
+        Map<Boolean, List<String>> grouping1 = ReducerApplication.grouping(
+
+
+                Student::isActive,
+                Student::getName,
+                students
+        );
+
+        System.out.println("grouping1 = " + grouping1);
+
+        Map<Gender, List<Student>> grouping2 = ReducerApplication.grouping(Student::getGender,
+                st -> st,
+                students);
+
+        System.out.println(grouping2);
     }
+
+
 }

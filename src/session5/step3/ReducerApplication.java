@@ -3,10 +3,43 @@ package session5.step3;
 import session5.step1.CBiFunction;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 public class ReducerApplication {
 
+
+    public static <K, V, E> Map<K, List<V>> grouping(
+            Function<E, K> keyMapper,
+            Function<E, V> valueMapper,
+            E... array) {
+
+
+        return
+                reduceL(
+                        acc -> e -> {
+                            K key = keyMapper.apply(e); // extract key
+                            V value = valueMapper.apply(e); //extract value
+
+                            acc.compute(key,(k,v)->{ // update value assigned to k-value
+                                if(v==null){
+                                    //create new list if this is a new key
+                                    v= new ArrayList<>();
+//                                    v= new CopyOnWriteArrayList<>()
+                                }
+                                //in all cases add the value to the list
+                                v.add(value);
+                                return v;
+                            });
+
+                            return acc;
+                        },
+                        new HashMap<K, List<V>>(),
+                        array
+                );
+    }
 
     //acc->elem->acc
     public static <E, A> A reduceL(CBiFunction<A, E, A> accumulateFunction, A initial, E... array) {
@@ -62,7 +95,6 @@ public class ReducerApplication {
         System.out.println("toList = " + toList);
 
 
-
         Integer sumR = reduceR(
                 elem -> acc -> acc + elem,
                 0,
@@ -76,12 +108,12 @@ public class ReducerApplication {
                 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         System.out.println("simulateSumR = " + simulateSumR);
 
-        CBiFunction<Integer,Integer,Integer> sumInt= a->b->a+b;
-        CBiFunction<Integer,Integer,Integer> intProduct= a->b->a*b;
-        int s=ReducerApplication.<Integer,Integer>advanceReduceL()
+        CBiFunction<Integer, Integer, Integer> sumInt = a -> b -> a + b;
+        CBiFunction<Integer, Integer, Integer> intProduct = a -> b -> a * b;
+        int s = ReducerApplication.<Integer, Integer>advanceReduceL()
                 .apply(sumInt)
                 .apply(0)
-                .apply(new Integer[]{1,2,3,4,5});
+                .apply(new Integer[]{1, 2, 3, 4, 5});
 
 
         Function<Integer[], Integer> sumOfArray = ReducerApplication.<Integer, Integer>advanceReduceL()
@@ -118,10 +150,10 @@ public class ReducerApplication {
     //elem:T
     //(a->t->a)->a->T[]->a
 
-    public static <A,T> Function<CBiFunction<A,T,A>,Function<A,Function<T[],A>>> advanceReduceL(){
+    public static <A, T> Function<CBiFunction<A, T, A>, Function<A, Function<T[], A>>> advanceReduceL() {
 
-        return combinFunction->initial->array->{
-            if(array==null){
+        return combinFunction -> initial -> array -> {
+            if (array == null) {
                 return initial;
             }
             A result = initial;
