@@ -8,7 +8,7 @@ import static session6.RecApplication.TailCall.suspend;
 public class RecApplication {
 
     public static void main(String[] args) {
-        System.out.println("add(10,20) = " + add(10, 20));
+//        System.out.println("add(10,20) = " + add(10, 20));
 
 //        System.out.println("add(10,40000) = " + add(10, 40000));// TCE TCO
 
@@ -36,63 +36,87 @@ public class RecApplication {
 //        System.out.println("sum = " + sum);
 
         System.out.println("sumTCE(40000, 0).eval() = " + sumTCE(40000, 0).eval());
-    }
 
-
-    public static long sum(long x,long result){
-
-        return x==0
-                ?result
-                :sum(x-1,result+x);
+        TailCall<Integer> integerTailCall = add4TCE(5, 40000);
+        System.out.println("integerTailCall.eval() = " + integerTailCall.eval());
 
     }
 
-    public static TailCall<Long> sumTCE(long x,long result){
 
-        return x==0
-                ?result(result)
-                :suspend(()->sumTCE(x-1,result+x));
+    public static long sum(long x, long result) {
+
+        return x == 0
+                ? result
+                : sum(x - 1, result + x);
 
     }
 
-    public static int add(int x, int y){
-//        return x+y;
-        return y ==0
-                ?x //-> x -> result(x)
-                :add(x+1,y-1); // -> suspend(()->add(..)
+    public static TailCall<Long> sumTCE(long x, long result) {
+
+        return x == 0
+                ? result(result)
+                : suspend(() -> sumTCE(x - 1, result + x));
+
     }
 
+//    public static int add(int x, int y) {
+////        return x+y;
+//        return y == 0
+//                ? x //-> x -> result(x)
+//                : add(x + 1, y - 1) + add(x, y); // -> suspend(()->add(..)
+//    }
 
 
-    public static int addTCE(int x,int y){
+    public static int addTCE(int x, int y) {
         TailCall<Integer> tce = addTail(x, y);
         return tce.eval();
     }
 
-    private static TailCall<Integer> addTail(int x,int y){
 
-        return y==0
+//    public static int add4(int x, int y) {
+////        return x+y;
+//        return y == 0
+//                ? x //-> x -> result(x)
+//                : add(x + 1, y - 1) + add(x, y); // -> suspend(()->add(..)
+//    }
+
+    //*think of using map inside the TCE.
+    public static TailCall<Integer> add4TCE(int x, int y) {//x+y+y
+//        return x+y;
+        return y == 0
+                ? result(x) //-> x -> result(x)
+                : TailCall.suspend(() ->
+                result(
+                        add4TCE(x + 1, y - 1).eval()
+                                +
+                                add4TCE(1, 0).eval())); // -> suspend(()->add(..)
+    }
+
+    private static TailCall<Integer> addTail(int x, int y) {
+
+        return y == 0
                 ? result(x)
-                : suspend(()->addTail(x+1,y-1));
+                : suspend(() -> addTail(x + 1, y - 1));
     }
 
 
-    public static abstract class TailCall<R>{
+    public static abstract class TailCall<R> {
 
         public abstract R eval();
 
         public abstract TailCall<R> resume();
+
         public abstract boolean isSuspend();
 
-        public static <R> Result<R> result(R res){
+        public static <R> Result<R> result(R res) {
             return new Result<>(res);
         }
 
-        public static <R> Suspend<R> suspend(Supplier<TailCall<R>> suspendFunction){
+        public static <R> Suspend<R> suspend(Supplier<TailCall<R>> suspendFunction) {
             return new Suspend<>(suspendFunction);
         }
 
-        public static class Result<R> extends TailCall<R>{
+        public static class Result<R> extends TailCall<R> {
 
             private final R result;
 
@@ -117,7 +141,7 @@ public class RecApplication {
         }
 
 
-        public static class Suspend<R> extends TailCall<R>{
+        public static class Suspend<R> extends TailCall<R> {
 
             private final Supplier<TailCall<R>> resumeFunction;
 
@@ -128,8 +152,8 @@ public class RecApplication {
             @Override
             public R eval() {
                 TailCall<R> tailCall = resumeFunction.get();
-                while (tailCall.isSuspend()){
-                    tailCall=tailCall.resume();
+                while (tailCall.isSuspend()) {
+                    tailCall = tailCall.resume();
                 }
                 return tailCall.eval();
 
