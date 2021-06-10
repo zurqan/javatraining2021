@@ -2,13 +2,17 @@ package session7;
 
 import java.util.List;
 
-public class WildExmaple {
+public class WildExmaple<T> {
 
 
     public static void main(String[] args) {
-
+//        WildExmaple<Integer> w=null;
+//        w.dummyJob()
     }
 
+    public  <E> void dummyJob2(List<E> l) {
+
+    }
     public static void dummyJob(List<?> l) {
         //op1
         //op2
