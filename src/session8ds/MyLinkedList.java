@@ -297,6 +297,8 @@ public class MyLinkedList<E> {
         return null;
     }
 
+
+
     private boolean isEmpty() {
         return size == 0;
     }
