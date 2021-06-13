@@ -122,6 +122,23 @@ public class MyLinkedList<E> {
 //a->b->a
     public <U> U reduceL(U seed, CBiFunction<?super U,?super E,?extends U> accFunction){
 
+        U result = seed;
+
+        Iterator<E> iterate = iterate();
+        while (iterate.hasNext()) {
+            E next = iterate.next();
+            result = accFunction.apply(result).apply(next);
+        }
+        return result;
+    }
+
+    public <U> U reduceR(U seed,BiFunction<?super E,?super U,?extends U> accFunction){
+
+        return reduceR(seed, currying(accFunction));
+
+    }
+
+    private <U> U reduceR(U seed, CBiFunction<? super E, ? super U, ? extends U> accFunction) {
         return null;
     }
 
@@ -184,6 +201,9 @@ public class MyLinkedList<E> {
         System.out.println("numbers.get(5) = " + numbers.get(5));
         System.out.println("numbers.get(-1) = " + numbers.get(-1));
 
+
+        Integer sum = another.reduceL(0, acc -> e -> acc + e);
+        System.out.println("sum = " + sum);
 
     }
 
