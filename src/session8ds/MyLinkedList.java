@@ -150,12 +150,19 @@ public class MyLinkedList<E> {
         return reduceR(seed,accFunction,last).eval();
     }
 
-//    private <U> U reduceR(U acc, CBiFunction<? super E,? super U,? extends U> accFunction, Node node) {
+    public <U> U reduceR(U seed,BiFunction<?super E,?super U,?extends U> accFunction,BiFunction<E,U,Boolean> stopCondition){
+
+        return reduceR(seed, currying(accFunction),currying(stopCondition));
+
+    }
+
+    //    private <U> U reduceR(U acc, CBiFunction<? super E,? super U,? extends U> accFunction, Node node) {
 //
 //        return node == null
 //                ? acc
 //                : reduceR(accFunction.apply(node.data).apply(acc), accFunction, node.previous);
 //    }
+
     private <U> TailCall<U> reduceR(U acc, CBiFunction<? super E,? super U,? extends U> accFunction, Node node) {
 
         return node == null
@@ -163,8 +170,50 @@ public class MyLinkedList<E> {
                 : suspend(()->reduceR(accFunction.apply(node.data).apply(acc), accFunction, node.previous));
     }
 
+    private <U, V> U reduceR(U seed, CBiFunction<? super E, ? super U, ? extends U> accFunction, CBiFunction<E, U, Boolean> stopCondition) {
+
+        return reduceR(seed,  accFunction, last, stopCondition).eval();
+
+    }
+
+    private <U> TailCall<U> reduceR(U acc, CBiFunction<? super E,? super U,? extends U> accFunction, Node node, CBiFunction<E, U, Boolean> stopCondition) {
+
+        return node == null || stopCondition.apply(node.data).apply(acc)
+                ? result(acc)
+                : suspend(()->reduceR(accFunction.apply(node.data).apply(acc), accFunction, node.previous));
+    }
+
     public MyLinkedList<E> filter(Predicate<? super E> filter){
         return reduceL(new MyLinkedList<>(), acc -> e -> filter.test(e) ? acc.addLast(e) : acc);
+    }
+
+    public boolean allMatch(Predicate<? super E> condition){
+
+//        if(isEmpty()){
+//            return false;
+//        }
+//        Iterator<E> iterate = iterate();
+//        while (iterate.hasNext()) {
+//            E next = iterate.next();
+//            boolean test = condition.test(next);
+//            if(!test)return false;
+//        }
+//        return true;
+
+//        return isEmpty()
+//                ?false
+//                :reduceR(true,e->acc->acc&&condition.test(e));//iterate over all element inside the list
+        return isEmpty()
+                ?false
+                :reduceR(true,e->acc->acc&&condition.test(e),e->acc->!acc);
+    }
+
+    public boolean noneMatch(Predicate<? super E> condition){
+
+    }
+
+    private boolean isEmpty() {
+        return size==0;
     }
 
     public int size(){
@@ -300,6 +349,10 @@ public class MyLinkedList<E> {
         Predicate<Integer> isEven = e -> e % 2 == 0;
         System.out.println("another.filter(e->e%2==0) = " + another.filter(isEven));
         System.out.println("another. odd= " + another.filter(isEven.negate()));
+
+        System.out.println("another.allMatch(isEven) = " + another.allMatch(isEven));
+
+        System.out.println("another.allMatch(e->e<100) = " + another.allMatch(e -> e < 100));
 
     }
 
