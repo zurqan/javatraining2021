@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 import static session6.RecApplication.TailCall.result;
 import static session6.RecApplication.TailCall.suspend;
@@ -181,6 +182,10 @@ public class MyLinkedList<E> {
 
     public <U> MyLinkedList<U> map(Function<?super E,?extends U> mapFunction){
 
+        return reduceR(new MyLinkedList<>(),e->acc->acc.push(mapFunction.apply(e)));
+    }
+
+    public <U> MyLinkedList<U> flatMap(Function<?super E,MyLinkedList<? extends U>> flatMap){
         return null;
     }
 
@@ -250,6 +255,17 @@ public class MyLinkedList<E> {
         System.out.println("another = " + another);
         MyLinkedList<Object> reversed = another.reduceR(new MyLinkedList<>(), (e -> acc -> acc.addLast(e)));
         System.out.println("reversed = " + reversed);
+
+
+        MyLinkedList<Integer> map = another
+                .map(a -> a + 10);
+        System.out.println("another = " + another);
+        System.out.println("map = " + map);
+
+        MyLinkedList<String> strMap = another.map(e -> "Number is " + e);
+        System.out.println("strMap = " + strMap);
+
+        IntStream.rangeClosed(1,3).map(a->a+10).forEach(System.out::println);
 
     }
 
