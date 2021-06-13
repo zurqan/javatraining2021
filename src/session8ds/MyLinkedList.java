@@ -1,11 +1,15 @@
 package session8ds;
 
 import session5.step1.CBiFunction;
+import session6.RecApplication.TailCall;
 
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.StringJoiner;
 import java.util.function.BiFunction;
 
+import static session6.RecApplication.TailCall.result;
+import static session6.RecApplication.TailCall.suspend;
 import static session8ds.Util.currying;
 
 public class MyLinkedList<E> {
@@ -139,11 +143,35 @@ public class MyLinkedList<E> {
     }
 
     private <U> U reduceR(U seed, CBiFunction<? super E, ? super U, ? extends U> accFunction) {
-        return null;
+//        return reduceR(seed,accFunction,last);
+        return reduceR(seed,accFunction,last).eval();
+    }
+
+//    private <U> U reduceR(U acc, CBiFunction<? super E,? super U,? extends U> accFunction, Node node) {
+//
+//        return node == null
+//                ? acc
+//                : reduceR(accFunction.apply(node.data).apply(acc), accFunction, node.previous);
+//    }
+    private <U> TailCall<U> reduceR(U acc, CBiFunction<? super E,? super U,? extends U> accFunction, Node node) {
+
+        return node == null
+                ? result(acc)
+                : suspend(()->reduceR(accFunction.apply(node.data).apply(acc), accFunction, node.previous));
     }
 
     public int size(){
         return size;
+    }
+
+
+    @Override
+    public String toString() {
+        //[e1,e2,e3]
+        return reduceL(
+                new StringJoiner(",","[","]"),
+                (acc, e)->acc.add(e.toString()))
+                .toString();
     }
 
     public Iterator<E> iterate(){
@@ -190,7 +218,7 @@ public class MyLinkedList<E> {
         MyLinkedList<Integer> another = new MyLinkedList<>();
         another.push(1);
         another.push(2);
-        another.push(3);
+        another.push(3);//3  2  1
 
         numbers.addAll(another);
 
@@ -204,6 +232,14 @@ public class MyLinkedList<E> {
 
         Integer sum = another.reduceL(0, acc -> e -> acc + e);
         System.out.println("sum = " + sum);
+
+
+        String reduce = another.reduceR("", e -> acc -> acc+e);//
+        System.out.println("reduce = " + reduce);
+
+        System.out.println("another = " + another);
+        MyLinkedList<Object> reversed = another.reduceR(new MyLinkedList<>(), (e -> acc -> acc.addLast(e)));
+        System.out.println("reversed = " + reversed);
 
     }
 
