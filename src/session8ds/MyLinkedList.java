@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
 import static session6.RecApplication.TailCall.result;
@@ -162,6 +163,10 @@ public class MyLinkedList<E> {
                 : suspend(()->reduceR(accFunction.apply(node.data).apply(acc), accFunction, node.previous));
     }
 
+    public MyLinkedList<E> filter(Predicate<? super E> filter){
+        return reduceL(new MyLinkedList<>(), acc -> e -> filter.test(e) ? acc.addLast(e) : acc);
+    }
+
     public int size(){
         return size;
     }
@@ -186,7 +191,7 @@ public class MyLinkedList<E> {
     }
 
     public <U> MyLinkedList<U> flatMap(Function<?super E,MyLinkedList<? extends U>> flatMap){
-        return null;
+        return reduceL(new MyLinkedList<>(),acc->e->acc.addAll(flatMap.apply(e)));
     }
 
     public Iterator<E> iterate(){
@@ -266,6 +271,35 @@ public class MyLinkedList<E> {
         System.out.println("strMap = " + strMap);
 
         IntStream.rangeClosed(1,3).map(a->a+10).forEach(System.out::println);
+
+
+        MyLinkedList<Object> flattedList = another.flatMap(e -> {
+            MyLinkedList<Object> flatted = new MyLinkedList<>();
+            flatted.push(e + 1);
+            flatted.push(e);
+            flatted.push(e - 1);
+            return flatted;
+        });
+
+
+
+        //321 -> <2 3 4> <1 2 3> <0 1 2>
+        System.out.println("flattedList = " + flattedList);
+
+        MyLinkedList<MyLinkedList<Integer>> map1 = another.map(e -> {
+            MyLinkedList<Integer> flatted = new MyLinkedList<>();
+            flatted.push(e + 1);
+            flatted.push(e);
+            flatted.push(e - 1);
+            return flatted;
+        });
+        System.out.println("map1 = " + map1);
+
+
+        another.push(4);
+        Predicate<Integer> isEven = e -> e % 2 == 0;
+        System.out.println("another.filter(e->e%2==0) = " + another.filter(isEven));
+        System.out.println("another. odd= " + another.filter(isEven.negate()));
 
     }
 
