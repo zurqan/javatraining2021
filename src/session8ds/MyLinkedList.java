@@ -1,7 +1,10 @@
 package session8ds;
 
+import session5.step1.CBiFunction;
+
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 public class MyLinkedList<E> {
 
@@ -42,12 +45,15 @@ public class MyLinkedList<E> {
                 :Optional.of(last.data);
     }
 
-    public void push(E e){
+    public MyLinkedList<E> push(E e){
         addFirst(e);
+
+        return this;
     }
 
-    public void add(E e){
+    public MyLinkedList<E> add(E e){
         addLast(e);
+        return this;
     }
 
     public Optional<E> get(int index){
@@ -67,7 +73,7 @@ public class MyLinkedList<E> {
         return nav;
     }
 
-    public void addFirst(E e) {
+    public MyLinkedList<E> addFirst(E e) {
         Node oldFirstNode = first;
         Node addedNode = new Node(null,oldFirstNode,e);
 
@@ -79,9 +85,10 @@ public class MyLinkedList<E> {
             oldFirstNode.previous=addedNode;
         }
         size++;
+        return this;
     }
 
-    public void addLast(E e){
+    public MyLinkedList<E>  addLast(E e){
         Node oldLast = last;
         Node newLastNode = new Node(oldLast, null, e);
         last=newLastNode;
@@ -92,14 +99,27 @@ public class MyLinkedList<E> {
         }
 
         size++;
+        return this;
     }
 
-    public void addAll(MyLinkedList<? extends E> another){
+    public MyLinkedList<E> addAll(MyLinkedList<? extends E> another){
         Iterator<? extends E> iterate = another.iterate();
         while (iterate.hasNext()){
             E next = iterate.next();
             add(next);
         }
+        return this;
+    }
+
+
+    public <U> U reduceL(U seed, BiFunction<?super U,?super E,?extends U> accFunction){
+        return reduceL(seed,acc->e->accFunction.apply(acc,e));
+    }
+
+//a->b->a
+    public <U> U reduceL(U seed, CBiFunction<?super U,?super E,?extends U> accFunction){
+
+
     }
 
     public int size(){
