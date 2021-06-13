@@ -1,6 +1,7 @@
 package session8ds;
 
 import session5.step1.CBiFunction;
+import session6.Application.Tuple;
 import session6.RecApplication.TailCall;
 
 import java.util.Comparator;
@@ -121,6 +122,54 @@ public class MyLinkedList<E> {
         return this;
     }
 
+    public Optional<E> removeFirst(){
+
+        return first==null
+                ?Optional.empty()
+                :Optional.of(removeNode(first));
+    }
+    public Optional<E> removeLast(){
+
+        return last==null
+                ?Optional.empty()
+                :Optional.of(removeNode(last));
+    }
+    public Optional<E> remove(int index){
+        if(index<0 || index>= size)return Optional.empty();
+
+        return Optional.of(removeNode(node(index)));
+    }
+
+
+
+
+    private E removeNode(Node node) {
+
+        Node previous = node.previous;
+        Node next = node.next;
+
+        if(previous==null){
+            first=next;
+        }else{
+            previous.next=next;
+        }
+
+        if(next==null){
+            last=previous;
+        }else{
+            next.previous=previous;
+        }
+
+        E data = node.data;
+
+        //gc to collect non-ref items
+//        node.data=null;//gc
+//        node.previous=null;//gc
+//        node.next=null;//gc
+
+        size--;
+        return data;
+    }
 
     public <U> U reduceL(U seed, BiFunction<? super U, ? super E, ? extends U> accFunction) {
 //        return reduceL(seed,acc->e->accFunction.apply(acc,e));
@@ -225,7 +274,27 @@ public class MyLinkedList<E> {
     public Optional<E> min(Comparator<E> comparator){
 
 
-        return Optional.empty();
+        return isEmpty()
+                ?Optional.empty()
+                :Optional.of(reduceR(last.data,e->acc->comparator.compare(e,acc)>0?acc:e));
+    }
+
+    public Optional<E> max(Comparator<E> comparator){
+
+
+        return isEmpty()
+                ?Optional.empty()
+                :Optional.of(reduceR(last.data,e->acc->comparator.compare(e,acc)<0?acc:e));
+    }
+
+    public <U> MyLinkedList<Tuple<E,U>> zip(MyLinkedList<U> another){
+
+        return null;
+    }
+
+    public <U> Tuple<MyLinkedList<E>,MyLinkedList<U>> unZip(MyLinkedList<Tuple<E,U>> zipped){
+
+        return null;
     }
 
     private boolean isEmpty() {
@@ -379,6 +448,19 @@ public class MyLinkedList<E> {
         System.out.println("another.anyMatch(isEven.negate()) = " + another.anyMatch(isEven.negate()));
         System.out.println("another.anyMatch(e->e>100) = " + another.anyMatch(e -> e > 100));
 
+        Optional<Integer> min = another.min(Comparator.comparing(x -> x));
+        System.out.println("min = " + min);
+
+        System.out.println("another.max(Comparator.comparing(x -> x)) = " + another.max(Comparator.comparing(x -> x)));
+
+        System.out.println("(new MyLinkedList<>()).min() = " + (new MyLinkedList<Integer>()).min(Comparator.comparing(x -> x)));
+
+
+//        another.removeFirst();
+//        System.out.println("another = " + another);
+
+        another.removeLast();
+        System.out.println("another = " + another);
     }
 
     private static void printList(MyLinkedList<Integer> numbers) {
