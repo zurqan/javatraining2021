@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import static session6.RecApplication.TailCall.result;
 import static session6.RecApplication.TailCall.suspend;
@@ -172,6 +173,15 @@ public class MyLinkedList<E> {
                 new StringJoiner(",","[","]"),
                 (acc, e)->acc.add(e.toString()))
                 .toString();
+    }
+
+    public MyLinkedList<E> reversed(){
+        return reduceR(new MyLinkedList<>(),(e->acc->acc.addLast(e)));
+    }
+
+    public <U> MyLinkedList<U> map(Function<?super E,?extends U> mapFunction){
+
+        return null;
     }
 
     public Iterator<E> iterate(){
