@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
+import static session8ds.Util.currying;
+
 public class MyLinkedList<E> {
 
     private int size;
@@ -113,13 +115,14 @@ public class MyLinkedList<E> {
 
 
     public <U> U reduceL(U seed, BiFunction<?super U,?super E,?extends U> accFunction){
-        return reduceL(seed,acc->e->accFunction.apply(acc,e));
+//        return reduceL(seed,acc->e->accFunction.apply(acc,e));
+        return reduceL(seed, currying(accFunction));
     }
 
 //a->b->a
     public <U> U reduceL(U seed, CBiFunction<?super U,?super E,?extends U> accFunction){
 
-
+        return null;
     }
 
     public int size(){
