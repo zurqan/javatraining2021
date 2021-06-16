@@ -233,7 +233,7 @@ public class MyLinkedList<E> {
                 ? result(acc)
                 : stopCondition.apply(node.data).apply(newAccValue)
                 ? result(newAccValue)
-                : suspend(() -> reduceR(newAccValue, accFunction, node.previous));
+                : suspend(() -> reduceR(newAccValue, accFunction, node.previous,stopCondition));
     }
 
     public MyLinkedList<E> filter(Predicate<? super E> filter) {

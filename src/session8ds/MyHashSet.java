@@ -83,10 +83,10 @@ public class MyHashSet<E> {
                 new Student("Mosa", 20, MALE, true, asList(ENGLISH, ARABIC)),
                 new Student("Ahmad", 25, MALE, false, asList(MATH, JAVA, ARABIC)),
                 new Student("Ahmad", 25, MALE, true, asList(MATH, JAVA, ARABIC)),
-                new Student("Ahmad", 25, MALE, true, asList(MATH, JAVA, ARABIC)),
-                new Student("Ahmad", 25, MALE, true, asList(MATH, JAVA, ARABIC)),
-                new Student("Ahmad", 25, MALE, true, asList(MATH, JAVA, ARABIC)),
-                new Student("Ahmad", 25, MALE, false, asList(MATH, JAVA, ARABIC))
+//                new Student("Ahmad", 25, MALE, true, asList(MATH, JAVA, ARABIC)),
+//                new Student("Ahmad", 25, MALE, true, asList(MATH, JAVA, ARABIC)),
+//                new Student("Ahmad", 25, MALE, true, asList(MATH, JAVA, ARABIC)),
+//                new Student("Ahmad", 25, MALE, false, asList(MATH, JAVA, ARABIC))
 
 //                new Student("Mohammad", 31, MALE, false, asList(MATH, ARABIC)),
 //                new Student("Mosa", 20, MALE, true, asList(ENGLISH, ARABIC)),
