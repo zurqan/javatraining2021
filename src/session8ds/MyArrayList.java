@@ -76,7 +76,7 @@ public class MyArrayList<E> {
         return reduceL(seed,accFunc,0).eval();
     }
 
-    public MyArrayList<E> removeByIndex(int index){
+    public Optional<E> removeByIndex(int index){
         return null;
     }
 
