@@ -4,10 +4,7 @@ import session5.step1.CBiFunction;
 import session6.Application.Tuple;
 import session6.RecApplication.TailCall;
 
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -289,10 +286,47 @@ public class MyLinkedList<E> {
 
     public <U> MyLinkedList<Tuple<E,U>> zip(MyLinkedList<U> another){
 
-        return null;
+        Node uFirst = (Node) another.first;
+        Node eFirst = this.first;
+
+        return zip(new MyLinkedList<Tuple<E,U>>(),eFirst,uFirst).eval();
     }
 
-    public <U> Tuple<MyLinkedList<E>,MyLinkedList<U>> unZip(MyLinkedList<Tuple<E,U>> zipped){
+    private <U> TailCall<MyLinkedList<Tuple<E, U>>> zip(MyLinkedList<Tuple<E,U>> zipList, Node eNode, Node uNode) {
+        return eNode==null||uNode==null
+                ?result(zipList)
+                :suspend(()->zip(zipList.addLast(new Tuple<>(eNode.data,(U)uNode.data)),eNode.next,uNode.next));
+    }
+
+    public <U> MyLinkedList<Tuple<E,U>> zipV2(MyLinkedList<U> another){
+        Iterator<U> uIterate = another.iterate();
+        Iterator<E> eIterate = iterate();
+        return zipV2(new MyLinkedList<>(),eIterate,uIterate);
+    }
+
+    private <U> MyLinkedList<Tuple<E, U>> zipV2(MyLinkedList<Tuple<E,U>> eMyLinkedList, Iterator<E> eIterate, Iterator<U> uIterate) {
+        return !eIterate.hasNext() || !uIterate.hasNext()
+                ?eMyLinkedList
+                :zipV2(eMyLinkedList.add(new Tuple<>(eIterate.next(),uIterate.next())),eIterate,uIterate);
+    }
+
+    public static <E,U> Tuple<MyLinkedList<E>,MyLinkedList<U>> unZip(MyLinkedList<Tuple<E,U>> zipped){
+
+        return zipped.reduceR(new Tuple<>(new MyLinkedList<E>(),new MyLinkedList<U>()),
+                e->acc->acc.map(a1->a1.push(e._1),a2->a2.push(e._2)));
+    }
+
+    public <U> MyLinkedList<U> scanL(U seed,CBiFunction<U,E,U> accFunction){
+
+        return reduceL(new MyLinkedList<U>().addFirst(seed),acc->e->acc.add(accFunction.apply((U)acc.last.data).apply(e)));
+    }
+
+    public <U> MyLinkedList<U> scanR(U seed,CBiFunction<E,U,U> accFunction){
+
+        return reduceR(new MyLinkedList<U>().addLast(seed),e->acc->acc.push(accFunction.apply(e).apply(acc.first.data)));
+    }
+
+    public <K> Map<K,MyLinkedList<E>> groupBy(Function<E,K> keyMapper){
 
         return null;
     }
@@ -463,6 +497,27 @@ public class MyLinkedList<E> {
 
         another.removeLast();
         System.out.println("another = " + another);
+
+        MyLinkedList<String> numStr = new MyLinkedList<>();
+        numStr.push("One");
+        numStr.push("Two");
+        numStr.push("Three");
+        numStr.push("Four");
+        System.out.println("another.zip(numStr) = " + another.zip(numStr));
+
+        MyLinkedList<Tuple<String, Integer>> tupleMyLinkedList = numStr.zipV2(another);
+        System.out.println("numStr.zipV2(numbers) = " + tupleMyLinkedList);
+
+        Tuple<MyLinkedList<String>, MyLinkedList<Integer>> myLinkedListMyLinkedListTuple = unZip(tupleMyLinkedList);
+
+        System.out.println("myLinkedListMyLinkedListTuple = " + myLinkedListMyLinkedListTuple);
+
+        //4,3,2
+        System.out.println("another.scanL(0,acc->e->acc+e) = " + another.scanL(0, acc -> e -> acc + e));
+
+        System.out.println("another.scanR(0,e->acc->e+acc) = " + another.scanR(0, e -> acc -> e + acc));
+
+
     }
 
     private static void printList(MyLinkedList<Integer> numbers) {
