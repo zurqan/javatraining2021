@@ -1,9 +1,14 @@
 package session8ds;
 
 import session5.step1.CBiFunction;
+import session6.RecApplication.TailCall;
 
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.StringJoiner;
+
+import static session6.RecApplication.TailCall.result;
+import static session6.RecApplication.TailCall.suspend;
 
 public class MyArrayList<E> {
 
@@ -36,6 +41,13 @@ public class MyArrayList<E> {
                 :Optional.of((E)data[index]);
     }
 
+    public Optional<E> getLast(){
+        return get(size-1);
+    }
+    public Optional<E> getFirst(){
+        return get(0);
+    }
+
     public MyArrayList<E> set(int index, E element){
 
         expandIfNeeded(index);
@@ -61,7 +73,47 @@ public class MyArrayList<E> {
     public <U> U reduceL(U seed, CBiFunction<U,E,U> accFunc){
 
 
+        return reduceL(seed,accFunc,0).eval();
+    }
+
+    public MyArrayList<E> removeByIndex(int index){
         return null;
+    }
+
+    private <U> TailCall<U> reduceL(U acc, CBiFunction<U, E, U> accFunc, int index) {
+        return index>=size
+                ? result(acc)
+                :suspend(()->reduceL(accFunc.apply(acc).apply((E)data[index]),accFunc,index+1));
+    }
+
+    public <U> U reduceR(U seed,CBiFunction<E,U,U> accFunc){
+
+        return reduceR(seed,accFunc,size-1);
+    }
+
+    private <U> U reduceR(U acc, CBiFunction<E, U, U> accFunc, int index) {
+        return index<0
+                ?acc
+                :reduceR(accFunc.apply((E)data[index]).apply(acc),accFunc,index-1);
+
+    }
+
+    public <U> MyArrayList<U> scanL(U seed,CBiFunction<U,E,U> accFunction){
+        return reduceL(new MyArrayList<U>().addFirst(seed),acc->e->acc.addLast(accFunction.apply((U)acc.getLast().get()).apply(e)));
+    }
+
+    public <U> MyArrayList<U> scanR(U seed,CBiFunction<E,U,U> accFunction){
+
+        return reduceR(new MyArrayList<U>().addLast(seed),e->acc->acc.addFirst(accFunction.apply(e).apply((U)acc.get(0).get())));
+    }
+
+    @Override
+    public String toString() {
+        //[e1,e2,e3]
+        return reduceL(
+                new StringJoiner(",", "[", "]"),
+                acc->e -> acc.add(e==null?"Null":e.toString()))
+                .toString();
     }
 
     private void expandIfNeeded(int index) {
@@ -89,6 +141,17 @@ public class MyArrayList<E> {
         System.out.println("numbers.size = " + numbers.size);
         System.out.println("numbers.set(10,100) = " + numbers.set(10, 100));
         System.out.println("numbers.size = " + numbers.data.length);
+
+        MyArrayList<Integer> tenNumbers = MyArrayList.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+        System.out.println("tenNumbers.reduceL(0,acc->e->acc+e) = " + tenNumbers.reduceL(0, acc -> e -> acc + e));
+
+        System.out.println("tenNumbers.reduceR(0,e->acc->e+acc) = " + tenNumbers.reduceR(0, e -> acc -> e + acc));
+
+        System.out.println("tenNumbers.scanL(0, acc -> e -> acc + e) = " + tenNumbers.scanL(0, acc -> e -> acc + e));
+
+        System.out.println("tenNumbers.scanR(0,e->acc->e+acc) = " + tenNumbers.scanR(0, e -> acc -> e + acc));
+
 
     }
 }
