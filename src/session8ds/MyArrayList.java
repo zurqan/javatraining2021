@@ -77,7 +77,13 @@ public class MyArrayList<E> {
     }
 
     public Optional<E> removeByIndex(int index){
-        return null;
+        if(index<0 || index>=size)return Optional.empty();
+
+        E removedElement = (E)data[index];
+
+        System.arraycopy(data,index+1,data,index,size-index-1);
+        data[--size]=null;
+        return Optional.of(removedElement);
     }
 
     private <U> TailCall<U> reduceL(U acc, CBiFunction<U, E, U> accFunc, int index) {
@@ -151,6 +157,9 @@ public class MyArrayList<E> {
         System.out.println("tenNumbers.scanL(0, acc -> e -> acc + e) = " + tenNumbers.scanL(0, acc -> e -> acc + e));
 
         System.out.println("tenNumbers.scanR(0,e->acc->e+acc) = " + tenNumbers.scanR(0, e -> acc -> e + acc));
+
+        System.out.println("tenNumbers.removeByIndex(5) = " + tenNumbers.removeByIndex(5));
+        System.out.println("tenNumbers = " + tenNumbers);
 
 
     }
