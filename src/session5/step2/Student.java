@@ -2,6 +2,7 @@ package session5.step2;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Student {
 
@@ -52,12 +53,31 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{" +
-                "name='" + name + '\'' +
-                ", age=" + age +
-                ", gender=" + gender +
-                ", active=" + active +
-                ", courses=" + courses +
-                '}';
+//        return "Student{" +
+//                "name='" + name + '\'' +
+//                ", age=" + age +
+//                ", gender=" + gender +
+//                ", active=" + active +
+//                ", courses=" + courses +
+//                '}';
+
+        return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Student)) return false;
+        Student student = (Student) o;
+        return getAge() == student.getAge() &&
+                isActive() == student.isActive() &&
+                Objects.equals(getName(), student.getName()) &&
+                getGender() == student.getGender() ;//&&
+//                Objects.equals(getCourses(), student.getCourses());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getAge());
     }
 }

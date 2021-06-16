@@ -226,6 +226,7 @@ public class MyLinkedList<E> {
 
     private <U> TailCall<U> reduceR(U acc, CBiFunction<? super E, ? super U, ? extends U> accFunction, Node node, CBiFunction<E, U, Boolean> stopCondition) {
 
+        //TODO note need to be visited
         U newAccValue = node == null?null:accFunction.apply(node.data).apply(acc);
 
         return node == null
@@ -377,7 +378,7 @@ public class MyLinkedList<E> {
         //[e1,e2,e3]
         return reduceL(
                 new StringJoiner(",", "[", "]"),
-                (acc, e) -> acc.add(e.toString()))
+                (acc, e) -> acc.add(e==null?"Null":e.toString()))
                 .toString();
     }
 
