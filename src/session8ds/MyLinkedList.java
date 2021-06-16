@@ -9,6 +9,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static session6.RecApplication.TailCall.result;
 import static session6.RecApplication.TailCall.suspend;
@@ -328,6 +329,27 @@ public class MyLinkedList<E> {
 
     public <K> Map<K,MyLinkedList<E>> groupBy(Function<E,K> keyMapper){
 
+        return reduceR(
+                new HashMap<>(),
+                e->acc->{
+                    acc.compute(keyMapper.apply(e),(k,v)->v==null?new MyLinkedList<E>().push(e):v.push(e));
+                    return acc;
+                }
+
+        );
+    }
+
+    public static <E> MyLinkedList<E> of(E... array){
+        MyLinkedList<E> result = new MyLinkedList<>();
+        //you can use reduceL r from util
+        for (E e : array) {
+            result.addLast(e);
+        }
+
+        return result;
+    }
+
+    public Stream<E> stream(){
         return null;
     }
 
@@ -516,6 +538,13 @@ public class MyLinkedList<E> {
         System.out.println("another.scanL(0,acc->e->acc+e) = " + another.scanL(0, acc -> e -> acc + e));
 
         System.out.println("another.scanR(0,e->acc->e+acc) = " + another.scanR(0, e -> acc -> e + acc));
+
+        Map<String, MyLinkedList<Integer>> evenOddMap = another.groupBy(e -> e % 2 == 0 ? "Even" : "Odd");
+        System.out.println("evenOddMap = " + evenOddMap);
+
+
+        MyLinkedList<String> strLinked = MyLinkedList.of("One", "Two", "Three");
+        System.out.println("strLinked = " + strLinked);
 
 
     }
