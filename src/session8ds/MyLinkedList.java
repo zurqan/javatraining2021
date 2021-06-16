@@ -350,7 +350,15 @@ public class MyLinkedList<E> {
     }
 
     public Stream<E> stream(){
-        return null;
+//        Stream.of()//1
+//        Colleciton.stream
+
+        return first==null
+                ?Stream.empty()
+                :Stream
+                    .iterate(first,node->node.next)
+                    .limit(size)
+                    .map(node->node.data);
     }
 
 
@@ -545,6 +553,12 @@ public class MyLinkedList<E> {
 
         MyLinkedList<String> strLinked = MyLinkedList.of("One", "Two", "Three");
         System.out.println("strLinked = " + strLinked);
+
+        strLinked
+                .stream()
+                .forEach(System.out::println);
+
+
 
 
     }
