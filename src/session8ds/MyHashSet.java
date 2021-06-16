@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static session5.step2.Course.*;
+import static session5.step2.Gender.FEMALE;
 import static session5.step2.Gender.MALE;
 
 public class MyHashSet<E> {
@@ -83,30 +84,30 @@ public class MyHashSet<E> {
                 new Student("Mosa", 20, MALE, true, asList(ENGLISH, ARABIC)),
                 new Student("Ahmad", 25, MALE, false, asList(MATH, JAVA, ARABIC)),
                 new Student("Ahmad", 25, MALE, true, asList(MATH, JAVA, ARABIC)),
-//                new Student("Ahmad", 25, MALE, true, asList(MATH, JAVA, ARABIC)),
-//                new Student("Ahmad", 25, MALE, true, asList(MATH, JAVA, ARABIC)),
-//                new Student("Ahmad", 25, MALE, true, asList(MATH, JAVA, ARABIC)),
-//                new Student("Ahmad", 25, MALE, false, asList(MATH, JAVA, ARABIC))
+                new Student("Ahmad", 25, MALE, true, asList(MATH, JAVA, ARABIC)),
+                new Student("Ahmad", 25, MALE, true, asList(MATH, JAVA, ARABIC)),
+                new Student("Ahmad", 25, MALE, true, asList(MATH, JAVA, ARABIC)),
+                new Student("Ahmad", 25, MALE, false, asList(MATH, JAVA, ARABIC)),
 
-//                new Student("Mohammad", 31, MALE, false, asList(MATH, ARABIC)),
-//                new Student("Mosa", 20, MALE, true, asList(ENGLISH, ARABIC)),
-//                new Student("Heba", 20, FEMALE, false, asList(ENGLISH, CHEMISTRY)),
-//                new Student("Ruba", 30, FEMALE, true, asList(JAVA, MATH, ENGLISH, CHEMISTRY)),
-//                new Student("Esa", 45, MALE, false, asList(JAVA, MATH, ENGLISH, CHEMISTRY)),
-//
-//                new Student("Mohammad", 31, MALE, true, asList(MATH, ARABIC)),
-//                new Student("Mosa", 20, MALE, false, asList(ENGLISH, ARABIC)),
-//                new Student("Heba", 20, FEMALE, true, asList(ENGLISH, CHEMISTRY)),
-//                new Student("Ruba", 30, FEMALE, false, asList(JAVA, MATH, ENGLISH, CHEMISTRY)),
-//                new Student("Esa", 45, MALE, true, asList(JAVA, MATH, ENGLISH, CHEMISTRY))
-//                ,
-//
-//
-//                new Student("Mohammad", 31, MALE, true, asList(MATH, ARABIC)),
-//                new Student("Mosa", 20, MALE, false, asList(ENGLISH, ARABIC)),
-//                new Student("Heba", 20, FEMALE, true, asList(ENGLISH, CHEMISTRY)),
-//                new Student("Ruba", 30, FEMALE, false, asList(JAVA, MATH, ENGLISH, CHEMISTRY)),
-//                new Student("Esa", 45, MALE, true, asList(JAVA, MATH, ENGLISH, CHEMISTRY))
+                new Student("Mohammad", 31, MALE, false, asList(MATH, ARABIC)),
+                new Student("Mosa", 20, MALE, true, asList(ENGLISH, ARABIC)),
+                new Student("Heba", 20, FEMALE, false, asList(ENGLISH, CHEMISTRY)),
+                new Student("Ruba", 30, FEMALE, true, asList(JAVA, MATH, ENGLISH, CHEMISTRY)),
+                new Student("Esa", 45, MALE, false, asList(JAVA, MATH, ENGLISH, CHEMISTRY)),
+
+                new Student("Mohammad", 31, MALE, true, asList(MATH, ARABIC)),
+                new Student("Mosa", 20, MALE, false, asList(ENGLISH, ARABIC)),
+                new Student("Heba", 20, FEMALE, true, asList(ENGLISH, CHEMISTRY)),
+                new Student("Ruba", 30, FEMALE, false, asList(JAVA, MATH, ENGLISH, CHEMISTRY)),
+                new Student("Esa", 45, MALE, true, asList(JAVA, MATH, ENGLISH, CHEMISTRY))
+                ,
+
+
+                new Student("Mohammad", 31, MALE, true, asList(MATH, ARABIC)),
+                new Student("Mosa", 20, MALE, false, asList(ENGLISH, ARABIC)),
+                new Student("Heba", 20, FEMALE, true, asList(ENGLISH, CHEMISTRY)),
+                new Student("Ruba", 30, FEMALE, false, asList(JAVA, MATH, ENGLISH, CHEMISTRY)),
+                new Student("Esa", 45, MALE, true, asList(JAVA, MATH, ENGLISH, CHEMISTRY))
 
         };
 
