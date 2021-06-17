@@ -24,6 +24,14 @@ public class MyHashSet<E> {
         this(DEFAULT_SIZE);
     }
 
+    public boolean contains(Object e){
+        int position = getPosition(e);
+        MyLinkedList<E> bucket = (MyLinkedList)data[position];
+
+        return bucket!=null&&bucket.anyMatch(Predicate.isEqual(e));
+
+    }
+
     public MyHashSet<E> add(E e){
         int position = getPosition(e);
         MyLinkedList<E> bucket = (MyLinkedList)data[position];
@@ -54,7 +62,7 @@ public class MyHashSet<E> {
         }
     }
 
-    private int getPosition(E e) {
+    private int getPosition(Object e) {
         if(e==null)return 0;
         int hashCode = Math.abs(e.hashCode());
         int position = hashCode%data.length;
@@ -116,6 +124,10 @@ public class MyHashSet<E> {
                 .forEach(e->{
                     traceAddStudent(studHashSet,e);
                 });
+
+
+        System.out.println("studHashSet.contains(10) = " + studHashSet.contains(10));
+        System.out.println("studHashSet.contains(                new Student(\"Esa\", 45, MALE, true, asList(JAVA, MATH, ENGLISH, CHEMISTRY))) = " + studHashSet.contains(new Student("Esa", 45, MALE, true, asList(JAVA, MATH, ENGLISH, CHEMISTRY))));
 
     }
 
