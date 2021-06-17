@@ -318,7 +318,16 @@ public abstract class FList<E> {
     //[1,2,3,4] [1,3] ->false
     public static <E> boolean hasSubList(FList<E> target, FList<E> sub) {
 
-        return false;
+        return hasSubList_(target,sub).eval();
+    }
+
+    private static <E> TailCall<Boolean> hasSubList_(FList<E> target, FList<E> sub) {
+
+        return target.isEmpty()
+                ?result(sub.isEmpty())
+                :startsWith(target,sub)
+                ?result(true)
+                :suspend(()->hasSubList_(target.tail(),sub));
     }
 
     //[1,2,3,4] [1,2] ->true

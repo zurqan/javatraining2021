@@ -55,10 +55,12 @@ public class TestFList {
         FList<String> product = FList.product(numNames, colors, e -> u -> e + " - " + u);
         System.out.println("product = " + product);
 
-        FList<Integer> target = FList.of(1, 2, 3, 4, 5);
+        FList<Integer> target = FList.of(0,1, 3, 4, 5);
         FList<Integer> sub = FList.of(1, 2, 3);
 
         System.out.println(FList.startsWith(target, sub));
+
+        System.out.println("FList.hasSubList(target,subList) = " + FList.hasSubList(target, sub));
 
     }
 }
