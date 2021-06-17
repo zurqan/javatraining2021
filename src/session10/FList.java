@@ -305,9 +305,20 @@ public abstract class FList<E> {
     }
 
     //[1,2,3] [4,5] *
-    //[4,5,8,10,12,15]
+    //[ 4,5, 8,10, 12,15 ]
     public static <E,U,P> FList<P> product(FList<E> eList,FList<U> ulist,CBiFunction<E,U,P> productFunction){
 
+        return eList.flatMap(e->ulist.map(u->productFunction.apply(e).apply(u)));
+    }
+
+    public static <E> boolean hasSubList(FList<E> target,FList<E> sub){
+
+        return false;
+    }
+
+    public static <E> boolean startsWith(FList<E> target,FList<E> sub){
+
+        return false;
     }
 
 }

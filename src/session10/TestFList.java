@@ -51,5 +51,9 @@ public class TestFList {
         Tuple<FList<Integer>, FList<String>> fListFListTuple = FList.unZip(tupleFList);
         System.out.println("fListFListTuple = " + fListFListTuple);
 
+        FList<String> colors = FList.of("RED","BLUE","YELLOW","WHITE");
+        FList<String> product = FList.product(numNames, colors, e -> u -> e + " - " + u);
+        System.out.println("product = " + product);
+
     }
 }
