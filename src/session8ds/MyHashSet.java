@@ -129,6 +129,9 @@ public class MyHashSet<E> {
         System.out.println("studHashSet.contains(10) = " + studHashSet.contains(10));
         System.out.println("studHashSet.contains(                new Student(\"Esa\", 45, MALE, true, asList(JAVA, MATH, ENGLISH, CHEMISTRY))) = " + studHashSet.contains(new Student("Esa", 45, MALE, true, asList(JAVA, MATH, ENGLISH, CHEMISTRY))));
 
+
+
+
     }
 
     private static void traceAdd(MyHashSet<String> hashSet,String str) {
