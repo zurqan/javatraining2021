@@ -5,6 +5,7 @@ import session5.step1.CBiFunction;
 import session6.Application.Tuple;
 import session6.RecApplication.TailCall;
 
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -280,9 +281,10 @@ public abstract class FList<E> {
         }
     }
 
-    public static <E, U> FList<Tuple<E,U>> tupleZip(FList<E> eList, FList<U> uList) {
-        return zip(eList,uList,e->u->new Tuple<>(e,u));
+    public static <E, U> FList<Tuple<E, U>> tupleZip(FList<E> eList, FList<U> uList) {
+        return zip(eList, uList, e -> u -> new Tuple<>(e, u));
     }
+
     public static <E, U, Z> FList<Z> zip(FList<E> eList, FList<U> uList, CBiFunction<E, U, Z> zippingFunction) {
         return zip(empty(), eList, uList, zippingFunction).eval().reverse();
     }
@@ -300,25 +302,42 @@ public abstract class FList<E> {
                                 zf)
         );
     }
-    public static <E,U> Tuple<FList<E>,FList<U>> unZip(FList<Tuple<E,U>> zipped){
-        return zipped.reduceR(new Tuple<>(empty(),empty()),e->acc->acc.map(a1->a1.addFirst(e._1),a2->a2.addFirst(e._2)));
+
+    public static <E, U> Tuple<FList<E>, FList<U>> unZip(FList<Tuple<E, U>> zipped) {
+        return zipped.reduceR(new Tuple<>(empty(), empty()), e -> acc -> acc.map(a1 -> a1.addFirst(e._1), a2 -> a2.addFirst(e._2)));
     }
 
     //[1,2,3] [4,5] *
     //[ 4,5, 8,10, 12,15 ]
-    public static <E,U,P> FList<P> product(FList<E> eList,FList<U> ulist,CBiFunction<E,U,P> productFunction){
+    public static <E, U, P> FList<P> product(FList<E> eList, FList<U> ulist, CBiFunction<E, U, P> productFunction) {
 
-        return eList.flatMap(e->ulist.map(u->productFunction.apply(e).apply(u)));
+        return eList.flatMap(e -> ulist.map(u -> productFunction.apply(e).apply(u)));
     }
 
-    public static <E> boolean hasSubList(FList<E> target,FList<E> sub){
+    //[0,-1,1,2,3,4] [1,2] ->true
+    //[1,2,3,4] [1,3] ->false
+    public static <E> boolean hasSubList(FList<E> target, FList<E> sub) {
 
         return false;
     }
 
-    public static <E> boolean startsWith(FList<E> target,FList<E> sub){
+    //[1,2,3,4] [1,2] ->true
+    //[1,2,3,4] [1,3] ->false
+    //[1,2,3,4] [] ->true
+    public static <E> boolean startsWith(FList<E> target, FList<E> sub) {
 
-        return false;
+        return startsWith_(target, sub).eval();
+    }
+
+    private static <E> TailCall<Boolean> startsWith_(FList<E> target, FList<E> sub) {
+        return
+                sub.isEmpty()
+                        ? result(true)
+                        : target.isEmpty() ?
+                        result(false)
+                        : !Objects.equals(target.head(), sub.head())
+                        ? result(false)
+                        : suspend(()->startsWith_(target.tail(), sub.tail()));
     }
 
 }

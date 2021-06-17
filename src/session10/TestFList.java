@@ -55,5 +55,10 @@ public class TestFList {
         FList<String> product = FList.product(numNames, colors, e -> u -> e + " - " + u);
         System.out.println("product = " + product);
 
+        FList<Integer> target = FList.of(1, 2, 3, 4, 5);
+        FList<Integer> sub = FList.of(1, 2, 3);
+
+        System.out.println(FList.startsWith(target, sub));
+
     }
 }
