@@ -6,6 +6,7 @@ import session6.Application.Tuple;
 import session6.RecApplication.TailCall;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -318,16 +319,16 @@ public abstract class FList<E> {
     //[1,2,3,4] [1,3] ->false
     public static <E> boolean hasSubList(FList<E> target, FList<E> sub) {
 
-        return hasSubList_(target,sub).eval();
+        return hasSubList_(target, sub).eval();
     }
 
     private static <E> TailCall<Boolean> hasSubList_(FList<E> target, FList<E> sub) {
 
         return target.isEmpty()
-                ?result(sub.isEmpty())
-                :startsWith(target,sub)
-                ?result(true)
-                :suspend(()->hasSubList_(target.tail(),sub));
+                ? result(sub.isEmpty())
+                : startsWith(target, sub)
+                ? result(true)
+                : suspend(() -> hasSubList_(target.tail(), sub));
     }
 
     //[1,2,3,4] [1,2] ->true
@@ -346,7 +347,27 @@ public abstract class FList<E> {
                         result(false)
                         : !Objects.equals(target.head(), sub.head())
                         ? result(false)
-                        : suspend(()->startsWith_(target.tail(), sub.tail()));
+                        : suspend(() -> startsWith_(target.tail(), sub.tail()));
+    }
+
+    public static <E, A> FList<E> unReduce(A start,  Function<A, Optional<Tuple<E, A>>> unReduceFunc) {
+
+
+        return unReduce(empty(), start, unReduceFunc).eval().reverse();
+    }
+
+    private static <E, A> TailCall<FList<E>> unReduce(FList<E> target, A lastAcc,  Function<A, Optional<Tuple<E, A>>> unReduceFunc) {
+
+        Optional<Tuple<E, A>> result = unReduceFunc.apply(lastAcc);
+        System.out.println("lastAcc = " + lastAcc);
+        return
+                result
+                        .<TailCall<FList<E>>>map(t -> suspend(() -> unReduce(target.addFirst(t._1),  t._2, unReduceFunc)))
+                        .orElse(result(target));
+    }
+
+    public static FList<Integer> range(int start,int end){
+        return unReduce(start,n->n>=end?Optional.empty():Optional.of(new Tuple<>(n,n+1)));
     }
 
 }

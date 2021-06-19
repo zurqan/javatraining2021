@@ -62,5 +62,9 @@ public class TestFList {
 
         System.out.println("FList.hasSubList(target,subList) = " + FList.hasSubList(target, sub));
 
+
+        FList<Integer> range = FList.range(0, 10);
+        System.out.println("range = " + range);
+
     }
 }
