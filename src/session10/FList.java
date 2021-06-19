@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import static session6.RecApplication.TailCall.result;
 import static session6.RecApplication.TailCall.suspend;
@@ -368,6 +369,10 @@ public abstract class FList<E> {
 
     public static FList<Integer> range(int start,int end){
         return unReduce(start,n->n>=end?Optional.empty():Optional.of(new Tuple<>(n,n+1)));
+    }
+
+    public static <E> FList<E> fill(int n, Supplier<E> sup){
+        return range(0, n).map(a -> sup.get());
     }
 
 }

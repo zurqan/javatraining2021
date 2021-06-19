@@ -66,5 +66,8 @@ public class TestFList {
         FList<Integer> range = FList.range(0, 10);
         System.out.println("range = " + range);
 
+        FList<String> fill = FList.fill(10, () -> "Test");
+        System.out.println("fill = " + fill);
+
     }
 }
