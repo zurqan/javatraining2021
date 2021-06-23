@@ -3,10 +3,9 @@ package assignment;
 
 import session6.Application;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static assignment.Course.*;
 import static assignment.CourseGrade.of;
@@ -60,7 +59,9 @@ public class Assignment4 {
         //add your implementation here
         //use stream to achieve the result
         //hint: What type of set you will use?
-        return null;
+        return         Stream.of(students).flatMap(s->s.getCourseGrades().stream().map(g->g.getCourse()))
+                .collect(Collectors.toCollection(()-> EnumSet.noneOf(Course.class)))
+                ;
     }
 
     /**
@@ -73,6 +74,10 @@ public class Assignment4 {
         //add your implementation here
 
         return null;
+
+    }
+
+    public static void main(String[] args) {
 
     }
 
